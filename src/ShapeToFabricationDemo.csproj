@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <OutputPath>..\bin\</OutputPath>
+    <TargetExt>.rhp</TargetExt>
+    <AssemblyName>ShapeToFabricationDemo</AssemblyName>
+    <RootNamespace>S2FDemo</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Icons\**\*.ghicon" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="RhinoCommon" Version="8.17.25066.7001" />
+    <PackageReference Include="Grasshopper2" Version="2.0.9205-wip.35525" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartProgram>C:\Program Files\Rhino 8\System\Rhino.exe</StartProgram>
+    <StartArguments></StartArguments>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
+</Project>
