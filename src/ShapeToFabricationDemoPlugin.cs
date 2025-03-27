@@ -1,7 +1,7 @@
 using System;
 using Grasshopper2.UI;
 
-namespace ShapeToFabricationDemo
+namespace S2FDemo
 {
   public sealed class Shape2FabricationDemoPlugin : Grasshopper2.Framework.Plugin
   {
