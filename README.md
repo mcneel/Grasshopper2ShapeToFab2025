@@ -1,4 +1,4 @@
-# Grasshopper2ShapeToFab2025
+# Grasshopper 2 ShapeToFab 2025
 
 The public repo for the Shape To Fabrication 2025 plug-in developer workshop.
 
