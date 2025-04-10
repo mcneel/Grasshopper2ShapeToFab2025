@@ -13,7 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="RhinoCommon" Version="8.17.25066.7001" />
-    <PackageReference Include="Grasshopper2" Version="2.0.9205-wip.35525" />
+    <PackageReference Include="Grasshopper2" Version="2.0.9225-wip.14825" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartProgram>C:\Program Files\Rhino 8\System\Rhino.exe</StartProgram>
