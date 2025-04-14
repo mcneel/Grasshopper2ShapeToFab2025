@@ -20,4 +20,7 @@
     <StartArguments></StartArguments>
     <StartAction>Program</StartAction>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
 </Project>
