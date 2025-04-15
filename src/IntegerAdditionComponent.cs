@@ -14,8 +14,9 @@ namespace S2FDemo
 
     protected override void AddInputs(InputAdder inputs)
     {
-      inputs.AddInteger("First Number", "A", "First number to add.");
-      inputs.AddInteger("Second Number", "B", "Second number to add.");
+      inputs.AddInteger("First Number", "A", "First number to add.").Set(1);
+      inputs.AddInteger("Second Number", "B", "Second number to add.").Set(1);
+      inputs.AddBoolean("Accept Overflow", "Of", "Toggle for overflow results.").Set(true);
     }
     protected override void AddOutputs(OutputAdder outputs)
     {
@@ -26,7 +27,25 @@ namespace S2FDemo
     {
       access.GetItem(0, out int A);
       access.GetItem(1, out int B);
-      access.SetItem(0, A + B);
+      access.GetItem(2, out bool overflow);
+
+      if (overflow)
+        unchecked
+        {
+          access.SetItem(0, A + B);
+        }
+      else
+      {
+        long aa = A;
+        long bb = B;
+        var result = aa + bb;
+        if (result < int.MinValue || result > int.MaxValue)
+        {
+          access.AddError("Overflow Computation", "These integers are too big to be added together.");
+          return;
+        }
+        access.SetItem(0, (int)result);
+      }
     }
   }
 }
