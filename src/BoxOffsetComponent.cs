@@ -1,4 +1,9 @@
+using System.Collections.Generic;
+using Eto.Drawing;
 using Grasshopper2.Components;
+using Grasshopper2.Data;
+using Grasshopper2.Parameters;
+using Grasshopper2.Types.Fields.Standard;
 using Grasshopper2.UI;
 using GrasshopperIO;
 using Rhino.Geometry;
@@ -8,7 +13,7 @@ namespace S2FDemo
   [IoId("ea4cedae-2e7c-4dd4-80be-8b8d6bf5f3fe")]
   public sealed class BoxOffsetComponent : Component
   {
-    public BoxOffsetComponent() : base(new Nomen("Box Offset", "Offset one side of a box.")) { }
+    public BoxOffsetComponent() : base(new Nomen("Box Offset", "Offset one side of a box.", "S2F", "S2F")) { }
     public BoxOffsetComponent(IReader reader) : base(reader) { }
 
     protected override void AddInputs(InputAdder inputs)
@@ -18,28 +23,52 @@ namespace S2FDemo
                         new Interval(-2, +2),
                         new Interval(0, 1));
       inputs.AddBox("Box", "Bx", "Box to offset.").Set(box);
-      inputs.AddInteger("Face Index", "Fi", "Face of box to offset.").Set(0);
-      inputs.AddNumber("Depth", "Dp", "Optional depth.", requirement: Grasshopper2.Parameters.Requirement.MayBeMissing);
+      inputs.AddEnum("Face Index", "Fi", "Face of box to offset.", BoxFace.XMin, Access.Twig);
+      inputs.AddNumber("Depth", "Dp", "Optional depth.", requirement: Requirement.MayBeMissing);
     }
 
     protected override void AddOutputs(OutputAdder outputs)
     {
-      outputs.AddBox("Box", "Bx", "Modified box.");
+      outputs.AddBox("Box", "Bx", "Modified box.", Access.Twig);
     }
 
     protected override void Process(IDataAccess access)
     {
       access.GetItem(0, out Box box);
-      access.GetItem(1, out int face);
+      access.GetTwig(1, out Twig<BoxFace> faces);
       if (!access.GetItem(2, out double depth))
         depth = double.NaN;
 
-      box = OffsetFace(box, (BoxFace)face, depth);
-      
-      access.SetItem(0, box);
+      var boxes = new List<Pear<Box>>();
+      for (int i = 0; i < faces.LeafCount; i++)
+      {
+        if (faces.NullAt(i))
+          boxes.Add(default);
+        else
+        {
+          box = OffsetFace(box, faces.ItemAt(i), depth);
+          boxes.Add(Garden.Pear(box));
+        }
+      }
+
+      access.SetTwig(0, Garden.TwigFromPears(boxes));
     }
 
-    public enum BoxFace { XMin, XMax, YMin, YMax, ZMin, ZMax }
+    public enum BoxFace
+    {
+      [UiName("Left"), UiInfo("dlfkhvkdfhv"), UiTint("Red9")]
+      XMin,
+      [UiName("Right"), UiInfo("dlfkhvkdfhv"), UiTint("Red6")]
+      XMax,
+      [UiName("Front"), UiInfo("dlfkhvkdfhv"), UiTint("Green9")]
+      YMin,
+      [UiName("Back"), UiInfo("dlfkhvkdfhv"), UiTint("Green6")]
+      YMax,
+      [UiName("Bottom"), UiInfo("dlfkhvkdfhv"), UiTint("Blue9")]
+      ZMin,
+      [UiName("Top"), UiInfo("dlfkhvkdfhv"), UiTint("Blue6")]
+      ZMax
+    }
 
     public static Box OffsetFace(Box box, BoxFace face, double depth)
     {
