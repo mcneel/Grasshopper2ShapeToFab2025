@@ -3,9 +3,28 @@ using Rhino.Geometry;
 using Grasshopper2.Data;
 using Grasshopper2.Display;
 using Grasshopper2.Types.Assistant;
+using Grasshopper2.Types.Conversion;
 
 namespace S2FDemo
 {
+  public sealed class AnnulusConversions : ConversionRepository
+  {
+    //ConversionDelegate<PartialAnnulus, Point3d>
+
+    public static Merit AnnulusToPoint(PartialAnnulus annulus, out Point3d point, out string message)
+    {
+      point = annulus.Plane.Origin;
+      message = "Point is placed at annulus centre";
+      return Merit.Fair;
+    }
+    // public static Merit PointToAnnulus(Point3d point, out Rectangle3d rec, out string message)
+    // {
+    //   rec = new Rectangle3d(new Plane(point, Vector3d.XAxis, Vector3d.YAxis), 0.1, 0.2);
+    //   message = "C'mon...";
+    //   return Merit.Weird;
+    // }
+  }
+
   public sealed class PartialAnnulusTypeAssistant : TypeAssistant<PartialAnnulus>
   {
     public PartialAnnulusTypeAssistant() : base("Partial Annulus") { }

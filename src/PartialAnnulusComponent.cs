@@ -1,4 +1,3 @@
-using Eto.Forms;
 using Grasshopper2.Components;
 using Grasshopper2.Types.Fields;
 using Grasshopper2.UI;
@@ -22,7 +21,7 @@ namespace S2FDemo
     }
     protected override void AddOutputs(OutputAdder outputs)
     {
-      outputs.AddGeneric("Annulus curve", "Ac", "Result");
+      outputs.AddCurve("Annulus curve", "Ac", "Result");
     }
 
     protected override void Process(IDataAccess access)
