@@ -67,11 +67,23 @@ namespace S2FDemo
       return instance.ToRhinoCurve().GetBoundingBox(transformation);
     }
 
-    // ClosestPoint
-    // FurthestPoint
+    public override object Transform(PartialAnnulus instance, Transform matrix)
+    {
+      var result = instance.Transform(matrix);
+      if (result != null)
+        return result;
 
-    // Transform
-    // Deform
+      var curve = instance.ToRhinoCurve().DuplicateCurve();
+      curve.MakeDeformable();
+      curve.Transform(matrix);
+      return curve;
+    }
+    public override object Deform(PartialAnnulus instance, SpaceMorph morph)
+    {
+      var curve = instance.ToRhinoCurve().DuplicateCurve();
+      morph.Morph(curve);
+      return curve;
+    }
 
     public override void Draw(Pear<PartialAnnulus> pear, DisplayBag bag)
     {

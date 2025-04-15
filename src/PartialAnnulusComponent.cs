@@ -1,4 +1,7 @@
 using Grasshopper2.Components;
+using Grasshopper2.Data;
+using Grasshopper2.Data.Meta;
+using Grasshopper2.Types.Colour;
 using Grasshopper2.Types.Fields;
 using Grasshopper2.UI;
 using GrasshopperIO;
@@ -41,7 +44,10 @@ namespace S2FDemo
 
       var annulus = new PartialAnnulus(plane, ri, ro, sw);
 
-      access.SetItem(0, annulus);
+      var sampledColour = StandardGradients.Matter.ColourAt(annulus.Length);
+      var meta = MetaData.Empty.Add(StandardNames.Display.Colour, sampledColour);
+      var pear = Garden.Pear(annulus, meta);
+      access.SetPear(0, pear);
     }
   }
 }
