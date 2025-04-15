@@ -13,21 +13,30 @@ namespace S2FDemo
 
     protected override void AddInputs(InputAdder inputs)
     {
-      // box
-      // identify one of the faces
-      // ask depth
+      var box = new Box(Plane.WorldXY,
+                        new Interval(-1, +1),
+                        new Interval(-2, +2),
+                        new Interval(0, 1));
+      inputs.AddBox("Box", "Bx", "Box to offset.").Set(box);
+      inputs.AddInteger("Face Index", "Fi", "Face of box to offset.").Set(0);
+      inputs.AddNumber("Depth", "Dp", "Optional depth.", requirement: Grasshopper2.Parameters.Requirement.MayBeMissing);
     }
 
     protected override void AddOutputs(OutputAdder outputs)
     {
-      // box
+      outputs.AddBox("Box", "Bx", "Modified box.");
     }
 
     protected override void Process(IDataAccess access)
     {
-      //  get inputs
-      // call OffsetFace()
-      // assign outputs
+      access.GetItem(0, out Box box);
+      access.GetItem(1, out int face);
+      if (!access.GetItem(2, out double depth))
+        depth = double.NaN;
+
+      box = OffsetFace(box, (BoxFace)face, depth);
+      
+      access.SetItem(0, box);
     }
 
     public enum BoxFace { XMin, XMax, YMin, YMax, ZMin, ZMax }
