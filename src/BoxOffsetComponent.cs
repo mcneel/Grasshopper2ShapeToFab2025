@@ -23,8 +23,12 @@ namespace S2FDemo
                         new Interval(-2, +2),
                         new Interval(0, 1));
       inputs.AddBox("Box", "Bx", "Box to offset.").Set(box);
-      inputs.AddEnum("Face Index", "Fi", "Face of box to offset.", BoxFace.XMin, Access.Twig);
+      inputs.AddEnum("Face Indices", "Fi", "Faces of box sequence to offset.", BoxFace.XMin, Access.Twig);
       inputs.AddNumber("Depth", "Dp", "Optional depth.", requirement: Requirement.MayBeMissing);
+
+      // 1. Add a gap spacing as an input
+      // 2. Make the depth input a Twig as well
+      // 3. Add an integer input for repeated offset
     }
 
     protected override void AddOutputs(OutputAdder outputs)
