@@ -1,0 +1,1 @@
+This folder contains empty files whose content still needs to be written.

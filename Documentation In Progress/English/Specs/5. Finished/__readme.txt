@@ -1,0 +1,1 @@
+This folder contains files which have been signed off by both the author and proofreader, and are ready to be published.

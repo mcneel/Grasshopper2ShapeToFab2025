@@ -1,0 +1,2 @@
+This folder contains files which could not pass the proofing stage since there are so many things wrong that it is unclear how to fix them.
+The proofreader may add notes for the author with advice or questions, but the author is required to write a second draft.
