@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using Grasshopper2.Components;
 using Grasshopper2.Data;
 using Grasshopper2.Data.Meta;
+using Grasshopper2.Parameters;
 using Grasshopper2.Types.Colour;
 using Grasshopper2.Types.Fields;
 using Grasshopper2.UI;
@@ -10,10 +13,18 @@ using Rhino.Geometry;
 namespace S2FDemo
 {
   [IoId("06141644-93bd-4518-8006-4580033e0727")]
-  public sealed class AnnulusComponent : Component
+  public sealed class AnnulusComponent : Component, IPinCushion
   {
     public AnnulusComponent() : base(new Nomen("Partial Annulus", "Creater a partial annulus curve from plane and radii.", "S2F", "S2F")) { }
     public AnnulusComponent(IReader reader) : base(reader) { }
+
+    public IEnumerable<Guid> SupportedPins
+    {
+      get
+      {
+        yield return Grasshopper2.Parameters.Standard.DisplayGradientPin.Id;
+      }
+    }
 
     protected override void AddInputs(InputAdder inputs)
     {
@@ -34,6 +45,8 @@ namespace S2FDemo
       access.GetItem(2, out Field outer);
       access.GetItem(3, out Field sweep);
 
+      access.GetItem(Grasshopper2.Parameters.Standard.DisplayGradientPin.Id, out Gradient gradient);
+
       var ri = inner.ScalarAt(plane.Origin);
       var ro = outer.ScalarAt(plane.Origin);
       var sw = sweep.ScalarAt(plane.Origin);
@@ -43,9 +56,13 @@ namespace S2FDemo
       access.RectifyDomain(ref sw, (0, 1), "sweep factor");
 
       var annulus = new PartialAnnulus(plane, ri, ro, sw);
+      var meta = MetaData.Empty;
+      if (gradient != null)
+      {
+        var sampledColour = gradient.ColourAt(annulus.Length);
+        meta = meta.Add(StandardNames.Display.Colour, sampledColour);
+      }
 
-      var sampledColour = StandardGradients.Matter.ColourAt(annulus.Length);
-      var meta = MetaData.Empty.Add(StandardNames.Display.Colour, sampledColour);
       var pear = Garden.Pear(annulus, meta);
       access.SetPear(0, pear);
     }
